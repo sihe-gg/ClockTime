@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new">
+        <file>icon.jpg</file>
+        <file>dtb25.png</file>
+    </qresource>
+</RCC>
