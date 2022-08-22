@@ -55,6 +55,8 @@ private:
     Ui::MainWindow *ui;
     QSystemTrayIcon *systemTrayIcon;
 
+//    Bubble *m_bubble;
+
     QMenu menu;
     QTimer *m_timer;
     QTimer *m_flickerTimer;

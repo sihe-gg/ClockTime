@@ -16,6 +16,7 @@ public:
     explicit Bubble(QWidget *parent = nullptr);
     ~Bubble();
 
+    void initLcd();
     void showMessage(const char* str);
 
     void mouseReleaseEvent(QMouseEvent *event);
@@ -25,6 +26,8 @@ signals:
 
 private:
     Ui::Bubble *ui;
+
+    QTimer *m_lcdTimer;
 
     QTimer *m_pBubbleTimerStart;
     QTimer *m_pBubbleTimerStay;

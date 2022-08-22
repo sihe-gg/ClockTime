@@ -135,9 +135,10 @@ void MainWindow::startTimer()
             ui->pushButton_start->setEnabled(true);
             ui->pushButton_stop->setEnabled(false);
             checkBoxHandle();
-            if (this->isHidden()) {
-                this->show();
-            }
+        }
+
+        if(m_currentTime == 10) {
+            bubbleFun();
         }
 
         ui->label_currentTimer->setText(QTime::currentTime().toString() + "\t\t" + QString::number(m_currentTime));
@@ -154,9 +155,6 @@ void MainWindow::showToolTips()
 // 勾选功能执行
 void MainWindow::checkBoxHandle()
 {
-    if(ui->checkBox_bubble->isChecked()) {
-        bubbleFun();
-    }
     if(ui->checkBox_flicker->isChecked() && !m_flickerTimer->isActive()) {
         m_flickerTimer->start();
     }
@@ -209,7 +207,6 @@ void MainWindow::loadini()
         ui->lineEdit_timerNum->setText(settings.value("timer").toString());
         ui->checkBox_common->setChecked(settings.value("common").toBool());
         ui->checkBox_flicker->setChecked(settings.value("flicker").toBool());
-        ui->checkBox_bubble->setChecked(settings.value("bubble").toBool());
     }
 
 }
@@ -222,10 +219,8 @@ void MainWindow::setini()
     settings.setValue("timer", ui->lineEdit_timerNum->text());
     bool isCommon = ui->checkBox_common->isChecked();
     bool isFlicker = ui->checkBox_flicker->isChecked();
-    bool isBubble = ui->checkBox_bubble->isChecked();
     settings.setValue("common", isCommon);
     settings.setValue("flicker", isFlicker);
-    settings.setValue("bubble", isBubble);
     settings.sync();
 
 }
