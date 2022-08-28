@@ -86,6 +86,10 @@ void MainWindow::systemTray()
             break;
         case QSystemTrayIcon::DoubleClick:
             // 双击
+            if(m_flickerTimer->isActive()) {
+                m_flickerTimer->stop();
+                systemTrayIcon->setIcon(QIcon(":/new/icon.jpg"));
+            }
             this->showNormal();
             this->activateWindow();
             break;

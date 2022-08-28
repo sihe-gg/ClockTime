@@ -32,13 +32,13 @@ Bubble::Bubble(QWidget *parent) :
         this->move(m_point.x(), m_desktopHeight);
         if(m_desktopHeight <= m_point.y()) {
             m_pBubbleTimerStart->stop();
-            m_pBubbleTimerStay->start(15000);// 设置停留时间
+//            m_pBubbleTimerStay->start(15000);// 设置停留时间
         }
     });
-    connect(m_pBubbleTimerStay, &QTimer::timeout, this, [=](){
-        m_pBubbleTimerStay->stop();
-        m_pBubbleTimerClose->start(100);
-    });
+//    connect(m_pBubbleTimerStay, &QTimer::timeout, this, [=](){
+//        m_pBubbleTimerStay->stop();
+//        m_pBubbleTimerClose->start(100);
+//    });
     connect(m_pBubbleTimerClose, &QTimer::timeout, this, [=](){
         m_transport -= 0.1;
         if(m_transport <= 0.0) {
@@ -87,5 +87,6 @@ void Bubble::showMessage(const char *str)
 
 void Bubble::mouseReleaseEvent(QMouseEvent *event)
 {
-    this->close();
+    m_pBubbleTimerClose->start(100);
+//    this->close();
 }
