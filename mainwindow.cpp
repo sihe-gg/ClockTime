@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->checkBox_common->setChecked(true);
     this->setWindowTitle("提醒小工具");
     ui->lineEdit_timerNum->setFocus();
+    m_bubble = new Bubble();
     loadini();
     initTimer();
     systemTray();
@@ -44,6 +45,7 @@ void MainWindow::initTimer()
     m_currentTime = 0;
 
     connect(ui->pushButton_start, &QPushButton::clicked, this, [=](){
+        m_isBubbleShow = true;
         ui->lineEdit_timerNum->setEnabled(false);
         ui->pushButton_start->setEnabled(false);
         ui->pushButton_stop->setEnabled(true);
@@ -63,7 +65,15 @@ void MainWindow::initTimer()
         }
     });
     // 闪烁托盘
-    connect(m_flickerTimer, &QTimer::timeout, this, &MainWindow::flickerFun);
+    connect(m_flickerTimer, &QTimer::timeout, this, [=](){
+        if(m_flickerFlag) {
+            m_flickerFlag = false;
+            systemTrayIcon->setIcon(m_firIcon);
+        }else {
+            m_flickerFlag = true;
+            systemTrayIcon->setIcon(m_secIcon);
+        }
+    });
 }
 
 // 初始化系统托盘
@@ -72,24 +82,19 @@ void MainWindow::systemTray()
     // 程序因为没有窗口显示而隐式点击托盘退出才给退出
     QApplication::setQuitOnLastWindowClosed(false);
     this->systemTrayIcon = new QSystemTrayIcon(this);
-    this->systemTrayIcon->setIcon(QIcon(":/new/icon.jpg"));
+    this->systemTrayIcon->setIcon(m_secIcon);
     this->systemTrayIcon->setToolTip("定时提醒小工具");
     this->systemTrayIcon->show();
     connect(systemTrayIcon, &QSystemTrayIcon::activated, this, [=](QSystemTrayIcon::ActivationReason reason){
         switch(reason) {
         case QSystemTrayIcon::Trigger:
             // 单击
-            if(m_flickerTimer->isActive()) {
-                m_flickerTimer->stop();
-                systemTrayIcon->setIcon(QIcon(":/new/icon.jpg"));
-            }
+            resumeTrayIcon();
             break;
         case QSystemTrayIcon::DoubleClick:
             // 双击
-            if(m_flickerTimer->isActive()) {
-                m_flickerTimer->stop();
-                systemTrayIcon->setIcon(QIcon(":/new/icon.jpg"));
-            }
+            resumeTrayIcon();
+
             this->showNormal();
             this->activateWindow();
             break;
@@ -141,8 +146,10 @@ void MainWindow::startTimer()
             checkBoxHandle();
         }
 
-        if(m_currentTime == 10) {
-            bubbleFun();
+        if(m_currentTime <= 10 && m_isBubbleShow && m_bubble->isHidden()) {
+            m_isBubbleShow = false;
+            m_bubble->show();
+            m_bubble->showMessage();
         }
 
         ui->label_currentTimer->setText(QTime::currentTime().toString() + "\t\t" + QString::number(m_currentTime));
@@ -160,6 +167,7 @@ void MainWindow::showToolTips()
 void MainWindow::checkBoxHandle()
 {
     if(ui->checkBox_flicker->isChecked() && !m_flickerTimer->isActive()) {
+//        systemTrayIcon->showMessage("123l", "asd");
         m_flickerTimer->start();
     }
     if(ui->checkBox_common->isChecked()) {
@@ -178,23 +186,12 @@ void MainWindow::commonFun()
     msgBox->open();
 }
 
-// 冒泡功能
-void MainWindow::bubbleFun()
+// 托盘闪烁恢复
+void MainWindow::resumeTrayIcon()
 {
-    Bubble *bubble = new Bubble();
-    bubble->show();
-}
-
-// 闪烁提示
-void MainWindow::flickerFun()
-{
-    bool flag = m_flickerTimer->property("Property_flag").toBool();
-    m_flickerTimer->setProperty("Property_flag", !flag);
-
-    if(flag) {
-        systemTrayIcon->setIcon(QIcon(":/new/dtb25.png"));
-    }else {
-        systemTrayIcon->setIcon(QIcon(":/new/icon.jpg"));
+    if(m_flickerTimer->isActive()) {
+        m_flickerTimer->stop();
+        systemTrayIcon->setIcon(m_secIcon);
     }
 }
 

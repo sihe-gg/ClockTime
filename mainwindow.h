@@ -38,8 +38,7 @@ public:
 
     // 提醒模式
     void commonFun();
-    void bubbleFun();
-    void flickerFun();
+    void resumeTrayIcon();
 
     // 读写配置文件
     void loadini();
@@ -55,12 +54,18 @@ private:
     Ui::MainWindow *ui;
     QSystemTrayIcon *systemTrayIcon;
 
-//    Bubble *m_bubble;
+    Bubble *m_bubble;
 
     QMenu menu;
     QTimer *m_timer;
     QTimer *m_flickerTimer;
 
     int m_currentTime;
+
+    bool m_isBubbleShow = false;     //判断是否最后 10s 弹出提醒框
+    bool m_flickerFlag = false;      // 托盘闪烁换图标判断
+
+    const QIcon m_firIcon = QIcon(":/new/dtb25.png");
+    const QIcon m_secIcon = QIcon(":/new/icon.jpg");
 };
 #endif // MAINWINDOW_H

@@ -17,7 +17,8 @@ public:
     ~Bubble();
 
     void initLcd();
-    void showMessage(const char* str);
+    void initBubbleWindow();
+    void showMessage();
 
     void mouseReleaseEvent(QMouseEvent *event);
 
@@ -30,7 +31,6 @@ private:
     QTimer *m_lcdTimer;
 
     QTimer *m_pBubbleTimerStart;
-    QTimer *m_pBubbleTimerStay;
     QTimer *m_pBubbleTimerClose;
     QPoint m_point;
     int m_desktopHeight;
