@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "Bubble.h"
+#include "bubble.h"
 #include <QMainWindow>
 #include <QDebug>
 #include <QTimer>
@@ -12,8 +12,6 @@
 #include <QAction>
 #include <QMessageBox>
 #include <QCloseEvent>
-
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -54,7 +52,7 @@ private:
     Ui::MainWindow *ui;
     QSystemTrayIcon *systemTrayIcon;
 
-    Bubble *m_bubble;
+    QSharedPointer<Bubble> m_bubble;
 
     QMenu menu;
     QTimer *m_timer;

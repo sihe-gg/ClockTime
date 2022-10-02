@@ -1,10 +1,12 @@
-#include "Bubble.h"
+#include "bubble.h"
 #include "ui_bubble.h"
 #include <QTimer>
 #include <QTime>
 #include <QScreen>
 #include <QRect>
 #include <QLCDNumber>
+
+QSharedPointer<Bubble> Bubble::m_bubble = NULL;
 
 Bubble::Bubble(QWidget *parent) :
     QWidget(parent),

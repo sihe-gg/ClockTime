@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->checkBox_common->setChecked(true);
     this->setWindowTitle("提醒小工具");
     ui->lineEdit_timerNum->setFocus();
-    m_bubble = new Bubble();
+    m_bubble = Bubble::getInstance();
     loadini();
     initTimer();
     systemTray();
